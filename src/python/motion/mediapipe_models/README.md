@@ -1,0 +1,1 @@
+﻿# Положить в эту папку pose_landmarker_heavy.task и pose_landmarker_lite.task

@@ -1,0 +1,33 @@
+﻿<Window x:Class="MotionCapture.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MotionCapture.Views"
+        xmlns:vm="clr-namespace:MotionCapture.ViewModels"
+        xmlns:controls="clr-namespace:MotionCapture.Controls"
+        mc:Ignorable="d"
+        Title="MotionCapture" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <controls:TopMenuControl Grid.Row="0"/>
+
+        <ComboBox
+            ItemsSource="{Binding CameraCounts}"
+            SelectedItem="{Binding SelectedCameraCount}"
+            Grid.Row="1" Width="100" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,10,0,0"/>
+
+        <ItemsControl ItemsSource="{Binding CameraControls}"
+                      Grid.Row="1" Margin="15,50,15,15">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Rows="2"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+    </Grid>
+</Window>
