@@ -1,0 +1,43 @@
+﻿syntax = "proto3";
+option csharp_namespace = "MotionCapture.Grpc.Contracts";
+package motion;
+
+message CameraFrame {
+    int32 camera_index = 1;
+    int64 timestamp_ms = 2;
+    bytes image = 3;
+}
+
+message Joint2D {
+    string name = 1;
+    int32 parent_index = 2;
+    float x = 3;
+    float y = 4;
+}
+
+message FrameLandmarks2D {
+    repeated Joint2D joints2d = 1;
+    int32 source_camera_index = 2;
+    int64 timestamp_ms = 3;
+}
+
+message Joint3D {
+    string name = 1;
+    int32 parent_index = 2;
+    float pos_x = 3;
+    float pos_y = 4;
+    float pos_z = 5;
+    float rot_x = 6;
+    float rot_y = 7;
+    float rot_z = 8;
+    float rot_w = 9;
+}
+
+message MotionRequest {
+    repeated CameraFrame frames = 1;
+}
+
+message MotionResponse {
+    repeated Joint3D joints = 1;
+    repeated FrameLandmarks2D frames_to_draw = 2;
+}

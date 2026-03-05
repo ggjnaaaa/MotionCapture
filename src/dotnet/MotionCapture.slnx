@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="MotionCapture/MotionCapture.csproj" />
+  <Project Path="MotionCapture.Core/MotionCapture.Core.csproj" />
+  <Project Path="MotionCapture.Infrastructure.Camera/MotionCapture.Infrastructure.Camera.csproj" />
+  <Project Path="MotionCapture.Infrastructure.Grpc/MotionCapture.Infrastructure.Grpc.csproj" Id="c3824796-570b-420a-a7d4-3fbf123ddad3" />
+  <Project Path="MotionCapture.Infrastructure.Sensors/MotionCapture.Infrastructure.Sensors.csproj" />
+</Solution>

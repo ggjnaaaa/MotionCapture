@@ -1,0 +1,9 @@
+﻿syntax = "proto3";
+option csharp_namespace = "MotionCapture.Grpc.Contracts";
+package motion;
+
+import "motion_messages.proto";
+
+service MotionService {
+    rpc ProcessMotion(MotionRequest) returns (MotionResponse);
+}
