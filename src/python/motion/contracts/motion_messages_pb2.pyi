@@ -73,3 +73,17 @@ class MotionResponse(_message.Message):
     joints: _containers.RepeatedCompositeFieldContainer[Joint3D]
     frames_to_draw: _containers.RepeatedCompositeFieldContainer[FrameLandmarks2D]
     def __init__(self, joints: _Optional[_Iterable[_Union[Joint3D, _Mapping]]] = ..., frames_to_draw: _Optional[_Iterable[_Union[FrameLandmarks2D, _Mapping]]] = ...) -> None: ...
+
+class AddCameraIndexRequest(_message.Message):
+    __slots__ = ("camera_Index",)
+    CAMERA_INDEX_FIELD_NUMBER: _ClassVar[int]
+    camera_Index: int
+    def __init__(self, camera_Index: _Optional[int] = ...) -> None: ...
+
+class ChangeCameraIndexRequest(_message.Message):
+    __slots__ = ("previous_camera_Index", "new_camera_Index")
+    PREVIOUS_CAMERA_INDEX_FIELD_NUMBER: _ClassVar[int]
+    NEW_CAMERA_INDEX_FIELD_NUMBER: _ClassVar[int]
+    previous_camera_Index: int
+    new_camera_Index: int
+    def __init__(self, previous_camera_Index: _Optional[int] = ..., new_camera_Index: _Optional[int] = ...) -> None: ...

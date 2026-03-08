@@ -41,3 +41,12 @@ message MotionResponse {
     repeated Joint3D joints = 1;
     repeated FrameLandmarks2D frames_to_draw = 2;
 }
+
+message AddCameraIndexRequest {
+    int32 camera_Index = 1;
+}
+
+message ChangeCameraIndexRequest {
+    int32 previous_camera_Index = 1;
+    int32 new_camera_Index = 2;
+}

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using MotionCapture.Core.Models;
 using MotionCapture.Grpc.Contracts;
 using MotionCapture.Infrastructure.Grpc.Options;
+using Google.Protobuf.WellKnownTypes;
 
 namespace MotionCapture.Infrastructure.Grpc.Repositories;
 
@@ -39,5 +40,35 @@ public class MotionGrpcClient : IMotionGrpcClient
             return null;
 
         return _mapper.Map<MotionResult>(response);
+    }
+
+    public bool ChangeCameraIndex(int? previousIndex, int newIndex)
+    {
+        Empty responce;
+        if (previousIndex == null)
+        {
+            responce = _client.AddCameraIndex(new() { CameraIndex = newIndex });
+        }
+        else
+        {
+            responce = _client.ChangeCameraIndex(new()
+            {
+                PreviousCameraIndex = (int)previousIndex,
+                NewCameraIndex = newIndex
+            });
+        }
+        return responce != null;
+    }
+
+    public bool RemoveCameras()
+    {
+        var responce = _client.RemoveCameras(new Empty());
+        return responce != null;
+    }
+
+    public bool AddCamera(int newIndex)
+    {
+        var responce = _client.AddCameraIndex(new() { CameraIndex = newIndex });
+        return responce != null;
     }
 }

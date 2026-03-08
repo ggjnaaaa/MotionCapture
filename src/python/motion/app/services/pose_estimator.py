@@ -9,23 +9,10 @@ import threading
 class PoseEstimator:
     logger = logging.getLogger(__name__)
     
-    _instance = None
-    _lock = threading.Lock()
-
     _lite_model_rel = "../../mediapipe_models/pose_landmarker_lite.task"
     _heavy_model_rel = "../../mediapipe_models/pose_landmarker_heavy.task"
 
-    def __new__(cls):
-        with cls._lock:
-            if cls._instance is None:
-                cls._instance = super(PoseEstimator, cls).__new__(cls)
-                cls._instance._initialized = False
-        return cls._instance
-
     def __init__(self):
-        if self._initialized:
-            return
-
         self._current_model_type = "heavy"
         self._landmarker = None
 
@@ -46,8 +33,7 @@ class PoseEstimator:
 
     def process(self, image_rgb, timestamp_ms: int):
         try:
-            with self._lock:
-                return self._landmarker.detect_for_video(image_rgb, timestamp_ms)
+            return self._landmarker.detect_for_video(image_rgb, timestamp_ms)
         except Exception as e:
             self.logger.error(f"Error during pose estimation: {e}")
             return None

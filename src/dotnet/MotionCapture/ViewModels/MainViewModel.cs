@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MotionCapture.Controls;
+using MotionCapture.Infrastructure.Grpc.Repositories;
 using System.Collections.ObjectModel;
 
 namespace MotionCapture.ViewModels;
@@ -21,10 +22,14 @@ public class MainViewModel : ViewModelBase
     public ObservableCollection<CameraCaptureControl> CameraControls { get; } = new();
 
     private readonly IServiceProvider _provider;
+    private readonly IMotionGrpcClient _motionGrpcClient;
 
-    public MainViewModel(IServiceProvider provider)
+    public MainViewModel(IServiceProvider provider, IMotionGrpcClient motionGrpcClient)
     {
         _provider = provider;
+        _motionGrpcClient = motionGrpcClient;
+
+        _motionGrpcClient.RemoveCameras();
     }
 
     private void UpdateCameras()
@@ -34,6 +39,9 @@ public class MainViewModel : ViewModelBase
             ((CameraViewModel)camera.DataContext).Stop();
         }
         CameraControls.Clear();
+
+        if (!_motionGrpcClient.RemoveCameras())
+            return;
 
         for (int i = 0; i < SelectedCameraCount; i++)
         {

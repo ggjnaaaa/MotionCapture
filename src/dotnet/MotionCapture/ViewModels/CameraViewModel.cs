@@ -1,6 +1,7 @@
 ﻿using Emgu.CV;
 using MotionCapture.Core.Interfaces;
 using MotionCapture.Core.Models;
+using MotionCapture.Infrastructure.Grpc.Repositories;
 using MotionCapture.Services;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ public class CameraViewModel : ViewModelBase
     private readonly ICameraCaptureService _captureService;
     private readonly IMotionTrackingService _motionService;
     private readonly ISkeletonDrawingService _drawingService;
+    private readonly IMotionGrpcClient _motionGrpcClient;
 
     public ObservableCollection<CameraInfo> AvailableCameras { get => new ObservableCollection<CameraInfo>(_cameraProvider.GetAvailableCameras()); }
     private Mat? _lastFrame;
@@ -51,12 +53,14 @@ public class CameraViewModel : ViewModelBase
         ICameraProvider cameraProvider,
         ICameraCaptureService captureService,
         IMotionTrackingService motionService,
-        ISkeletonDrawingService drawingService)
+        ISkeletonDrawingService drawingService,
+        IMotionGrpcClient motionGrpcClient)
     {
         _cameraProvider = cameraProvider;
         _captureService = captureService;
         _motionService = motionService;
         _drawingService = drawingService;
+        _motionGrpcClient = motionGrpcClient;
 
         _captureService.FrameArrived += frame =>
         {
@@ -98,9 +102,14 @@ public class CameraViewModel : ViewModelBase
         {
             _cameraProvider.MarkFree(_currentIndex.Value);
             _motionService.UnregisterCamera(_currentIndex.Value);
+            _motionGrpcClient.ChangeCameraIndex(_currentIndex.Value, SelectedCamera.Index);
+        }
+        else
+        {
+            _motionGrpcClient.AddCamera(SelectedCamera.Index);
         }
 
-        _currentIndex = SelectedCamera.Index;
+            _currentIndex = SelectedCamera.Index;
         _cameraProvider.MarkBusy(_currentIndex.Value);
         _motionService.RegisterCamera(_currentIndex.Value);
 

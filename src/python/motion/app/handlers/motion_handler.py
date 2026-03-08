@@ -3,8 +3,9 @@
 import cv2
 import numpy as np
 import mediapipe as mp
+from google.protobuf import empty_pb2
 
-from app.services.pose_estimator import PoseEstimator
+from app.services.multi_pose_estimator import MultiPoseEstimator
 from contracts import motion_service_pb2_grpc
 from app.mappers.proto_mapper import ProtoMapper
 from app.domain.models import Joint3D, FrameLandmarks2D
@@ -15,18 +16,28 @@ class MotionHandler(motion_service_pb2_grpc.MotionServiceServicer):
     logger = logging.getLogger(__name__)
 
     def __init__(self):
-        self.estimator = PoseEstimator()
+        self.estimator_manager = MultiPoseEstimator()
         self.proto_mapper = ProtoMapper()
         self.skeleton_builder = SkeletonBuilder()
 
     def ProcessMotion(self, request, context):
-        self.logger.info(f"Received {len(request.frames)} frame(s)")
-
+        if not self.estimator_manager.is_initialized():
+            self.logger.error("PoseEstimator manager not initialized. Call ChangeCameraCount first.")
+            context.abort(context.code.FAILED_PRECONDITION, 
+                         "Motion handler not initialized. Please set camera count first.")
+        
+        sorted_frames = sorted(request.frames, key=lambda f: f.camera_index)
+        
         all_joints3d = []
         all_frame_landmarks2d = []
 
-        for frame in request.frames:
+        for frame in sorted_frames:
             self.logger.info(f"Processing frame from camera {frame.camera_index} at timestamp {frame.timestamp_ms} ms")
+
+            estimator = self.estimator_manager.get_estimator(frame.camera_index)
+            if estimator is None:
+                self.logger.error(f"No PoseEstimator available for camera {frame.camera_index}")
+                continue
 
             # ------------------------------------
             # bytes → numpy
@@ -52,7 +63,7 @@ class MotionHandler(motion_service_pb2_grpc.MotionServiceServicer):
             # ------------------------------------
             # MediaPipe detect
             # ------------------------------------
-            result = self.estimator.process(
+            result = estimator.process(
                 mp_image,
                 frame.timestamp_ms
             )
@@ -78,7 +89,15 @@ class MotionHandler(motion_service_pb2_grpc.MotionServiceServicer):
 
             all_frame_landmarks2d.append(frame_landmarks2d)
 
+        if len(all_frame_landmarks2d) == 1:
+            self.logger.info("Only one frame detected, skipping 3D estimation")
+            # todo сделать маппинг из точек в 3D
+            return self.proto_mapper.to_proto_response(
+                domain_frame_landmarks=all_frame_landmarks2d,
+                joints=[]
+            )
         # ----------------------------------------
+        # triangulation
         # Пока 3D заглушка
         # ----------------------------------------
         dummy_joint3d = Joint3D(
@@ -102,3 +121,24 @@ class MotionHandler(motion_service_pb2_grpc.MotionServiceServicer):
             domain_frame_landmarks=all_frame_landmarks2d,
             joints=all_joints3d
         )
+    
+    def AddCameraIndex(self, request, context):
+        self.logger.info(f"Added camera index {request.camera_Index}")
+
+        self.estimator_manager.add_estimator(request.camera_Index)
+
+        return empty_pb2.Empty()
+    
+    def RemoveCameras(self, request, context):
+        self.logger.info("Remove all estimators")
+
+        self.estimator_manager.remove_estimators()
+
+        return empty_pb2.Empty()
+    
+    def ChangeCameraIndex(self, request, context):
+        self.logger.info(f"Camera index {request.previous_camera_Index} changed to {request.new_camera_Index}")
+
+        self.estimator_manager.change_camera_index(request.previous_camera_Index, request.new_camera_Index)
+        
+        return empty_pb2.Empty()
