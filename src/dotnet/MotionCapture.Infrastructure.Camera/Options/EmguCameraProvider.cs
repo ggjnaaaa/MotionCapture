@@ -24,7 +24,7 @@ public class EmguCameraProvider : ICameraProvider
 
         for (int i = 0; i < 10; i++)
         {
-            using var cap = new VideoCapture(i);
+            using var cap = new VideoCapture(i, VideoCapture.API.DShow);
 
             if (cap.IsOpened)
             {

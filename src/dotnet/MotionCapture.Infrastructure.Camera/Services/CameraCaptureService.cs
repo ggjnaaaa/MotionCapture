@@ -15,7 +15,7 @@ public class CameraCaptureService : ICameraCaptureService
     {
         Stop();
 
-        _capture = new VideoCapture(index);
+        _capture = new VideoCapture(index, VideoCapture.API.DShow);
         _capture.Set(CapProp.FrameWidth, 640);
         _capture.Set(CapProp.FrameHeight, 480);
 

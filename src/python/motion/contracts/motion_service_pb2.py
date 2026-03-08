@@ -23,9 +23,10 @@ _sym_db = _symbol_database.Default()
 
 
 import motion_messages_pb2 as motion__messages__pb2
+from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14motion_service.proto\x12\x06motion\x1a\x15motion_messages.proto2O\n\rMotionService\x12>\n\rProcessMotion\x12\x15.motion.MotionRequest\x1a\x16.motion.MotionResponseB\x1f\xaa\x02\x1cMotionCapture.Grpc.Contractsb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14motion_service.proto\x12\x06motion\x1a\x15motion_messages.proto\x1a\x1bgoogle/protobuf/empty.proto2\xa8\x02\n\rMotionService\x12>\n\rProcessMotion\x12\x15.motion.MotionRequest\x1a\x16.motion.MotionResponse\x12M\n\x11\x43hangeCameraIndex\x12 .motion.ChangeCameraIndexRequest\x1a\x16.google.protobuf.Empty\x12G\n\x0e\x41\x64\x64\x43\x61meraIndex\x12\x1d.motion.AddCameraIndexRequest\x1a\x16.google.protobuf.Empty\x12?\n\rRemoveCameras\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.EmptyB\x1f\xaa\x02\x1cMotionCapture.Grpc.Contractsb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -33,6 +34,6 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'motion_service_pb2', _globa
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\252\002\034MotionCapture.Grpc.Contracts'
-  _globals['_MOTIONSERVICE']._serialized_start=55
-  _globals['_MOTIONSERVICE']._serialized_end=134
+  _globals['_MOTIONSERVICE']._serialized_start=85
+  _globals['_MOTIONSERVICE']._serialized_end=381
 # @@protoc_insertion_point(module_scope)
