@@ -4,9 +4,28 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MotionCapture.Controls"
+             xmlns:vm="clr-namespace:MotionCapture.ViewModels"
+             xmlns:converters="clr-namespace:MotionCapture.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+             d:DesignHeight="40" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="6, 3, 8, 5"/>
+        </Style>
+        <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
+    </UserControl.Resources>
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+        <Button Content="{Binding CalibrationButtonText}" Width="170"
+                Command="{Binding ToggleCalibrationCommand}"
+                IsEnabled="{Binding IsConnected}"/>
+        <Button Content="{Binding SkeletonCaptureButtonText}" 
+                Width="140"
+                Command="{Binding ToggleSkeletonCaptureCommand}"
+                IsEnabled="{Binding IsConnected}"/>
+        <Button Content="Попробовать переподключиться" 
+                Width="200"
+                Command="{Binding TryConnectCommand}"
+                Visibility="{Binding IsConnected, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+    </StackPanel>
 </UserControl>

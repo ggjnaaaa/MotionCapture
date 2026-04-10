@@ -1,0 +1,19 @@
+﻿syntax = "proto3";
+option csharp_namespace = "MotionCapture.Grpc.Contracts.Calibration";
+package calibration;
+
+import "motion/motion_messages.proto";
+
+message CalibrationFrame {
+    repeated motion.CameraFrame frames = 1;
+}
+
+message CalibrationStatus {
+    int32 frames_collected = 1;
+    int32 frames_required = 2;
+    float progress = 3;
+    bool is_done = 4;
+    bool success = 5;
+    string message = 6;
+    repeated motion.FrameLandmarks2D landmarks = 7;
+}

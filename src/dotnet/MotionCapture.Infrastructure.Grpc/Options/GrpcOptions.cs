@@ -1,6 +1,10 @@
 ﻿namespace MotionCapture.Infrastructure.Grpc.Options;
 
-public class GrpcOptions
+public class GrpcClientConfig
 {
-    public string Address { get; set; } = string.Empty;
+    public string? ClientType { get; set; }
+    public int MaxRetryAttempts { get; set; } = 3;
+    public List<string> RetryableStatuses { get; set; } = new() { "Unavailable" };
+    public int TimeoutSec { get; set; } = 10;
+    public string? Address { get; set; }
 }

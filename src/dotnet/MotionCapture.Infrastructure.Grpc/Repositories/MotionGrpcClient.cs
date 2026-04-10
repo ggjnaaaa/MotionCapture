@@ -1,22 +1,27 @@
 ﻿using AutoMapper;
-using Grpc.Net.Client;
-using Microsoft.Extensions.Options;
+using Google.Protobuf.WellKnownTypes;
+using Grpc.Net.ClientFactory;
+using MotionCapture.Core.Interfaces;
 using MotionCapture.Core.Models;
 using MotionCapture.Grpc.Contracts;
+using MotionCapture.Grpc.Contracts.Motion;
 using MotionCapture.Infrastructure.Grpc.Options;
-using Google.Protobuf.WellKnownTypes;
 
 namespace MotionCapture.Infrastructure.Grpc.Repositories;
 
 public class MotionGrpcClient : IMotionGrpcClient
 {
     private readonly MotionService.MotionServiceClient _client;
+    private readonly IConnectionStateService _connectionStateService;
     private readonly IMapper _mapper;
 
-    public MotionGrpcClient(IOptions<GrpcOptions> options, IMapper mapper)
+    public MotionGrpcClient(GrpcClientFactory grpcClientFactory, IMapper mapper, IConnectionStateService connectionStateService)
     {
-        var channel = GrpcChannel.ForAddress(options.Value.Address);
-        _client = new MotionService.MotionServiceClient(channel);
+        _client = grpcClientFactory.CreateClient<MotionService.MotionServiceClient>(GrpcClientNames.MotionService);
+        ArgumentNullException.ThrowIfNull(_client);
+        ArgumentNullException.ThrowIfNull(connectionStateService);
+        ArgumentNullException.ThrowIfNull(mapper);
+        _connectionStateService = connectionStateService;
         _mapper = mapper;
     }
 
@@ -26,7 +31,7 @@ public class MotionGrpcClient : IMotionGrpcClient
 
         foreach (var frame in batch)
         {
-            request.Frames.Add(new MotionCapture.Grpc.Contracts.CameraFrame
+            request.Frames.Add(new MotionCapture.Grpc.Contracts.Motion.CameraFrame
             {
                 CameraIndex = frame.CameraIndex,
                 TimestampMs = frame.Timestamp,
@@ -40,35 +45,5 @@ public class MotionGrpcClient : IMotionGrpcClient
             return null;
 
         return _mapper.Map<MotionResult>(response);
-    }
-
-    public bool ChangeCameraIndex(int? previousIndex, int newIndex)
-    {
-        Empty responce;
-        if (previousIndex == null)
-        {
-            responce = _client.AddCameraIndex(new() { CameraIndex = newIndex });
-        }
-        else
-        {
-            responce = _client.ChangeCameraIndex(new()
-            {
-                PreviousCameraIndex = (int)previousIndex,
-                NewCameraIndex = newIndex
-            });
-        }
-        return responce != null;
-    }
-
-    public bool RemoveCameras()
-    {
-        var responce = _client.RemoveCameras(new Empty());
-        return responce != null;
-    }
-
-    public bool AddCamera(int newIndex)
-    {
-        var responce = _client.AddCameraIndex(new() { CameraIndex = newIndex });
-        return responce != null;
     }
 }

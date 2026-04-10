@@ -10,7 +10,7 @@
         Title="MotionCapture" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="40"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         
@@ -19,15 +19,21 @@
         <ComboBox
             ItemsSource="{Binding CameraCounts}"
             SelectedItem="{Binding SelectedCameraCount}"
-            Grid.Row="1" Width="100" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,10,0,0"/>
+            Grid.Row="1" Width="100" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,10,0,0"
+            IsEnabled="{Binding IsConnected}"/>
 
         <ItemsControl ItemsSource="{Binding CameraControls}"
-                      Grid.Row="1" Margin="15,50,15,15">
+                      Grid.Row="1" Margin="15,50,15,15"
+                      IsEnabled="{Binding IsConnected}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Rows="2"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
+        <controls:OverlayControl Panel.ZIndex="10"
+                                 VerticalAlignment="Stretch"
+                                 HorizontalAlignment="Stretch"
+                                 Grid.RowSpan="2"/>
     </Grid>
 </Window>

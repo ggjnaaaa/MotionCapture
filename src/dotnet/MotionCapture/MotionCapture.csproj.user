@@ -5,6 +5,9 @@
     <Compile Update="Controls\CameraCaptureControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Controls\OverlayControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Controls\TopMenuControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

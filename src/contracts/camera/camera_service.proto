@@ -1,12 +1,11 @@
 ﻿syntax = "proto3";
-option csharp_namespace = "MotionCapture.Grpc.Contracts";
-package motion;
+option csharp_namespace = "MotionCapture.Grpc.Contracts.Camera";
+package camera;
 
-import "motion_messages.proto";
+import "camera/camera_messages.proto";
 import "google/protobuf/empty.proto";
 
-service MotionService {
-    rpc ProcessMotion(MotionRequest) returns (MotionResponse);
+service CameraService {
     rpc ChangeCameraIndex(ChangeCameraIndexRequest) returns (google.protobuf.Empty);
     rpc AddCameraIndex(AddCameraIndexRequest) returns (google.protobuf.Empty);
     rpc RemoveCameras(google.protobuf.Empty) returns (google.protobuf.Empty);

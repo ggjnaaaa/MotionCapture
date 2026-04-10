@@ -12,5 +12,6 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         DataContext = vm;
+        Loaded += async (s, e) => await vm.InitializeAsync();
     }
 }

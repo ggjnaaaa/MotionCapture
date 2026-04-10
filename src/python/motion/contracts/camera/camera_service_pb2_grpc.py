@@ -3,10 +3,10 @@
 import grpc
 import warnings
 
+from camera import camera_messages_pb2 as camera_dot_camera__messages__pb2
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
-import motion_messages_pb2 as motion__messages__pb2
 
-GRPC_GENERATED_VERSION = '1.78.1'
+GRPC_GENERATED_VERSION = '1.78.0'
 GRPC_VERSION = grpc.__version__
 _version_not_supported = False
 
@@ -19,14 +19,14 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + ' but the generated code in motion_service_pb2_grpc.py depends on'
+        + ' but the generated code in camera/camera_service_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
     )
 
 
-class MotionServiceStub(object):
+class CameraServiceStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -35,36 +35,25 @@ class MotionServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.ProcessMotion = channel.unary_unary(
-                '/motion.MotionService/ProcessMotion',
-                request_serializer=motion__messages__pb2.MotionRequest.SerializeToString,
-                response_deserializer=motion__messages__pb2.MotionResponse.FromString,
-                _registered_method=True)
         self.ChangeCameraIndex = channel.unary_unary(
-                '/motion.MotionService/ChangeCameraIndex',
-                request_serializer=motion__messages__pb2.ChangeCameraIndexRequest.SerializeToString,
+                '/camera.CameraService/ChangeCameraIndex',
+                request_serializer=camera_dot_camera__messages__pb2.ChangeCameraIndexRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 _registered_method=True)
         self.AddCameraIndex = channel.unary_unary(
-                '/motion.MotionService/AddCameraIndex',
-                request_serializer=motion__messages__pb2.AddCameraIndexRequest.SerializeToString,
+                '/camera.CameraService/AddCameraIndex',
+                request_serializer=camera_dot_camera__messages__pb2.AddCameraIndexRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 _registered_method=True)
         self.RemoveCameras = channel.unary_unary(
-                '/motion.MotionService/RemoveCameras',
+                '/camera.CameraService/RemoveCameras',
                 request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 _registered_method=True)
 
 
-class MotionServiceServicer(object):
+class CameraServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
-
-    def ProcessMotion(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
 
     def ChangeCameraIndex(self, request, context):
         """Missing associated documentation comment in .proto file."""
@@ -85,21 +74,16 @@ class MotionServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
 
-def add_MotionServiceServicer_to_server(servicer, server):
+def add_CameraServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'ProcessMotion': grpc.unary_unary_rpc_method_handler(
-                    servicer.ProcessMotion,
-                    request_deserializer=motion__messages__pb2.MotionRequest.FromString,
-                    response_serializer=motion__messages__pb2.MotionResponse.SerializeToString,
-            ),
             'ChangeCameraIndex': grpc.unary_unary_rpc_method_handler(
                     servicer.ChangeCameraIndex,
-                    request_deserializer=motion__messages__pb2.ChangeCameraIndexRequest.FromString,
+                    request_deserializer=camera_dot_camera__messages__pb2.ChangeCameraIndexRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'AddCameraIndex': grpc.unary_unary_rpc_method_handler(
                     servicer.AddCameraIndex,
-                    request_deserializer=motion__messages__pb2.AddCameraIndexRequest.FromString,
+                    request_deserializer=camera_dot_camera__messages__pb2.AddCameraIndexRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'RemoveCameras': grpc.unary_unary_rpc_method_handler(
@@ -109,41 +93,14 @@ def add_MotionServiceServicer_to_server(servicer, server):
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'motion.MotionService', rpc_method_handlers)
+            'camera.CameraService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('motion.MotionService', rpc_method_handlers)
+    server.add_registered_method_handlers('camera.CameraService', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
-class MotionService(object):
+class CameraService(object):
     """Missing associated documentation comment in .proto file."""
-
-    @staticmethod
-    def ProcessMotion(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(
-            request,
-            target,
-            '/motion.MotionService/ProcessMotion',
-            motion__messages__pb2.MotionRequest.SerializeToString,
-            motion__messages__pb2.MotionResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
 
     @staticmethod
     def ChangeCameraIndex(request,
@@ -159,8 +116,8 @@ class MotionService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/motion.MotionService/ChangeCameraIndex',
-            motion__messages__pb2.ChangeCameraIndexRequest.SerializeToString,
+            '/camera.CameraService/ChangeCameraIndex',
+            camera_dot_camera__messages__pb2.ChangeCameraIndexRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options,
             channel_credentials,
@@ -186,8 +143,8 @@ class MotionService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/motion.MotionService/AddCameraIndex',
-            motion__messages__pb2.AddCameraIndexRequest.SerializeToString,
+            '/camera.CameraService/AddCameraIndex',
+            camera_dot_camera__messages__pb2.AddCameraIndexRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options,
             channel_credentials,
@@ -213,7 +170,7 @@ class MotionService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/motion.MotionService/RemoveCameras',
+            '/camera.CameraService/RemoveCameras',
             google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options,

@@ -1,6 +1,7 @@
 ﻿from typing import List
-from contracts import motion_messages_pb2
+from contracts.motion import motion_messages_pb2
 from app.domain.models import CameraFrame, Joint2D, Joint3D, FrameLandmarks2D
+from contracts.calibration import calibration_messages_pb2
 
 
 class ProtoMapper:
@@ -23,7 +24,8 @@ class ProtoMapper:
             name=domain_joint.name,
             parent_index=domain_joint.parent_index,
             x=domain_joint.x,
-            y=domain_joint.y
+            y=domain_joint.y,
+            is_visible=domain_joint.is_visible
         )
 
     @staticmethod
@@ -63,3 +65,27 @@ class ProtoMapper:
                 for j in domain_frame_landmarks.joints2d
             ],
     )
+
+    @staticmethod
+    def to_calibration_response(
+        frames_collected: int = 0,
+        frames_required: int = 0,
+        progress: float = 0.0,
+        is_done: bool = False,
+        success: bool = False,
+        message: str = "",
+        landmarks: List[FrameLandmarks2D] = None
+        ) -> calibration_messages_pb2.CalibrationStatus:
+        landmarks = landmarks or []
+        return calibration_messages_pb2.CalibrationStatus(
+            frames_collected=frames_collected,
+            frames_required=frames_required,
+            progress=progress,
+            is_done=is_done,
+            success=success,
+            message=message,
+            landmarks=[
+                ProtoMapper.to_proto_frame_landmarks2d(f)
+                for f in landmarks
+            ]
+        )

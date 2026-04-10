@@ -1,5 +1,5 @@
 ﻿syntax = "proto3";
-option csharp_namespace = "MotionCapture.Grpc.Contracts";
+option csharp_namespace = "MotionCapture.Grpc.Contracts.Motion";
 package motion;
 
 message CameraFrame {
@@ -13,6 +13,7 @@ message Joint2D {
     int32 parent_index = 2;
     float x = 3;
     float y = 4;
+    bool is_visible = 5;
 }
 
 message FrameLandmarks2D {
@@ -40,13 +41,4 @@ message MotionRequest {
 message MotionResponse {
     repeated Joint3D joints = 1;
     repeated FrameLandmarks2D frames_to_draw = 2;
-}
-
-message AddCameraIndexRequest {
-    int32 camera_Index = 1;
-}
-
-message ChangeCameraIndexRequest {
-    int32 previous_camera_Index = 1;
-    int32 new_camera_Index = 2;
 }

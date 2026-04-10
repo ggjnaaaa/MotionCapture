@@ -1,0 +1,9 @@
+﻿syntax = "proto3";
+option csharp_namespace = "MotionCapture.Grpc.Contracts.Health";
+package health;
+
+import "google/protobuf/empty.proto";
+
+service HealthCheckService {
+    rpc CheckHealth(google.protobuf.Empty) returns (google.protobuf.Empty);
+}

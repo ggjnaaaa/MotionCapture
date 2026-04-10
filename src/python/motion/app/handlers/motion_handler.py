@@ -3,29 +3,25 @@
 import cv2
 import numpy as np
 import mediapipe as mp
-from google.protobuf import empty_pb2
 
 from app.services.multi_pose_estimator import MultiPoseEstimator
-from contracts import motion_service_pb2_grpc
+from contracts.motion import motion_service_pb2_grpc
 from app.mappers.proto_mapper import ProtoMapper
 from app.domain.models import Joint3D, FrameLandmarks2D
 from app.mappers.skeleton_builder import SkeletonBuilder
+from app.services.multi_pose_smoother import MultiPoseSmoother
 
 
 class MotionHandler(motion_service_pb2_grpc.MotionServiceServicer):
     logger = logging.getLogger(__name__)
 
-    def __init__(self):
-        self.estimator_manager = MultiPoseEstimator()
+    def __init__(self, estimator_manager: MultiPoseEstimator, pose_smoother_manager: MultiPoseSmoother):
+        self.estimator_manager = estimator_manager
         self.proto_mapper = ProtoMapper()
         self.skeleton_builder = SkeletonBuilder()
+        self.pose_smoother_manager = pose_smoother_manager
 
-    def ProcessMotion(self, request, context):
-        if not self.estimator_manager.is_initialized():
-            self.logger.error("PoseEstimator manager not initialized. Call ChangeCameraCount first.")
-            context.abort(context.code.FAILED_PRECONDITION, 
-                         "Motion handler not initialized. Please set camera count first.")
-        
+    async def ProcessMotion(self, request, context):
         sorted_frames = sorted(request.frames, key=lambda f: f.camera_index)
         
         all_joints3d = []
@@ -39,9 +35,6 @@ class MotionHandler(motion_service_pb2_grpc.MotionServiceServicer):
                 self.logger.error(f"No PoseEstimator available for camera {frame.camera_index}")
                 continue
 
-            # ------------------------------------
-            # bytes → numpy
-            # ------------------------------------
             np_arr = np.frombuffer(frame.image, np.uint8)
             image_bgr = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
 
@@ -55,14 +48,9 @@ class MotionHandler(motion_service_pb2_grpc.MotionServiceServicer):
 
             mp_image = mp.Image(
                 image_format=mp.ImageFormat.SRGB,
-                data=image_rgb
+                data=np.ascontiguousarray(image_rgb)
             )
 
-            self.logger.info(f"Image shape: {image_rgb.shape}")
-
-            # ------------------------------------
-            # MediaPipe detect
-            # ------------------------------------
             result = estimator.process(
                 mp_image,
                 frame.timestamp_ms
@@ -70,16 +58,22 @@ class MotionHandler(motion_service_pb2_grpc.MotionServiceServicer):
 
             self.logger.info(f"MediaPipe detection done. Is result empty? {'Yes' if not result or not result.pose_landmarks else 'No'}")
 
+            if not result or not result.pose_landmarks:
+                continue
+
+            smooth_pose_landmarks = self.pose_smoother_manager.smooth(frame.camera_index, result.pose_landmarks[0])
+
             # ------------------------------------
             # Map to domain Joint2D
             # ------------------------------------
             joints2d = self.skeleton_builder.build(
-                mp_result=result,
+                smooth_mp_result=smooth_pose_landmarks,
                 height=height,
                 width=width
             )
 
             self.logger.info(f"Mapped to {len(joints2d)} joints2d for frame")
+
 
             frame_landmarks2d = FrameLandmarks2D(
                 joints2d=joints2d,
@@ -121,24 +115,3 @@ class MotionHandler(motion_service_pb2_grpc.MotionServiceServicer):
             domain_frame_landmarks=all_frame_landmarks2d,
             joints=all_joints3d
         )
-    
-    def AddCameraIndex(self, request, context):
-        self.logger.info(f"Added camera index {request.camera_Index}")
-
-        self.estimator_manager.add_estimator(request.camera_Index)
-
-        return empty_pb2.Empty()
-    
-    def RemoveCameras(self, request, context):
-        self.logger.info("Remove all estimators")
-
-        self.estimator_manager.remove_estimators()
-
-        return empty_pb2.Empty()
-    
-    def ChangeCameraIndex(self, request, context):
-        self.logger.info(f"Camera index {request.previous_camera_Index} changed to {request.new_camera_Index}")
-
-        self.estimator_manager.change_camera_index(request.previous_camera_Index, request.new_camera_Index)
-        
-        return empty_pb2.Empty()

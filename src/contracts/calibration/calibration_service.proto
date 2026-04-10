@@ -1,0 +1,9 @@
+﻿syntax = "proto3";
+option csharp_namespace = "MotionCapture.Grpc.Contracts.Calibration";
+package calibration;
+
+import "calibration/calibration_messages.proto";
+
+service CalibrationService {
+    rpc Calibrate(stream CalibrationFrame) returns (stream CalibrationStatus);
+}

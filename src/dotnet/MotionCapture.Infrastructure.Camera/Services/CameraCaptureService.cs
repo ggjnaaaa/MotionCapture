@@ -7,14 +7,23 @@ namespace MotionCapture.Infrastructure.Camera.Services;
 
 public class CameraCaptureService : ICameraCaptureService
 {
-    public event Action<Mat> FrameArrived;
+    private IFrameSyncBuffer _frameSyncBuffer;
+
+    public event Action<int, Mat>? FrameArrived;
     private VideoCapture? _capture;
     private CancellationTokenSource? _cts;
+    private int _index;
+
+    public CameraCaptureService(IFrameSyncBuffer frameSyncBuffer)
+    {
+        _frameSyncBuffer = frameSyncBuffer ?? throw new ArgumentNullException(nameof(frameSyncBuffer));
+    }
 
     public void Start(int index)
     {
         Stop();
 
+        _index = index;
         _capture = new VideoCapture(index, VideoCapture.API.DShow);
         _capture.Set(CapProp.FrameWidth, 640);
         _capture.Set(CapProp.FrameHeight, 480);
@@ -46,7 +55,8 @@ public class CameraCaptureService : ICameraCaptureService
             if (!success || frame.IsEmpty)
                 return;
 
-            FrameArrived?.Invoke(frame);
+            FrameArrived?.Invoke(_index, frame);
+            _frameSyncBuffer.SubmitFrame(frame, _index);
         }
         catch (Exception ex)
         {

@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MotionCapture.Infrastructure.Camera.Extensions;
 using MotionCapture.Infrastructure.Grpc.Extensions;
+using MotionCapture.Services;
 using MotionCapture.ViewModels;
 using MotionCapture.Views;
 using System.Windows;
@@ -30,7 +31,13 @@ namespace MotionCapture
                     services.AddCameraInfrastructure();
 
                     services.AddTransient<CameraViewModel>();
+                    services.AddTransient<TopMenuViewModel>();
+                    services.AddTransient<OverlayViewModel>();
                     services.AddTransient<MainViewModel>();
+
+                    services.AddSingleton<ApplicationState>();
+                    services.AddSingleton<EmguSkeletonDrawingService>();
+                    services.AddSingleton<ProcessingOrchestrator>();
                 })
                 .Build();
 

@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using MotionCapture.Core.Models;
-using MotionCapture.Grpc.Contracts;
-using FrameLandmarks2D = MotionCapture.Grpc.Contracts.FrameLandmarks2D;
-using Joint2D = MotionCapture.Grpc.Contracts.Joint2D;
-using Joint3D = MotionCapture.Grpc.Contracts.Joint3D;
+using MotionCapture.Grpc.Contracts.Motion;
+using FrameLandmarks2D = MotionCapture.Grpc.Contracts.Motion.FrameLandmarks2D;
+using Joint2D = MotionCapture.Grpc.Contracts.Motion.Joint2D;
+using Joint3D = MotionCapture.Grpc.Contracts.Motion.Joint3D;
 
 namespace MotionCapture.Infrastructure.Grpc.Mapping;
 

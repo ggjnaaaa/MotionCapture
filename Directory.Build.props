@@ -1,0 +1,8 @@
+﻿<Project>
+  <ItemGroup>
+    <Protobuf Include="$(MSBuildThisFileDirectory)src\contracts\motion\*.proto" ProtoRoot="$(MSBuildThisFileDirectory)src\contracts" GrpcServices="Client" />
+    <Protobuf Include="$(MSBuildThisFileDirectory)src\contracts\calibration\*.proto" ProtoRoot="$(MSBuildThisFileDirectory)src\contracts" GrpcServices="Client" />
+    <Protobuf Include="$(MSBuildThisFileDirectory)src\contracts\camera\*.proto" ProtoRoot="$(MSBuildThisFileDirectory)src\contracts" GrpcServices="Client" />
+    <Protobuf Include="$(MSBuildThisFileDirectory)src\contracts\health\*.proto" ProtoRoot="$(MSBuildThisFileDirectory)src\contracts" GrpcServices="Client" />
+  </ItemGroup>
+</Project>

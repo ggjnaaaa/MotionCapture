@@ -11,10 +11,11 @@ public static class DependencyInjection
     public static IServiceCollection AddCameraInfrastructure(this IServiceCollection services)
     {
         services.AddSingleton<ICameraProvider, EmguCameraProvider>();
-        services.AddSingleton<ISkeletonDrawingService, EmguSkeletonDrawingService>();
 
         services.AddTransient<ICameraCaptureService, CameraCaptureService>();
-        services.AddTransient<IMotionTrackingService, MotionTrackingService>();
+        services.AddSingleton<IMotionTrackingService, MotionTrackingService>();
+        services.AddSingleton<ICalibrationService, CalibrationStreamingService>();
+        services.AddSingleton<IFrameSyncBuffer, FrameSyncBuffer>();
 
         return services;
     }

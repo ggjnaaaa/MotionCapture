@@ -4,7 +4,7 @@ namespace MotionCapture.Core.Interfaces;
 
 public interface ICameraCaptureService
 {
-    event Action<Mat> FrameArrived;
+    event Action<int, Mat> FrameArrived;
 
     void Start(int index);
     void Stop();

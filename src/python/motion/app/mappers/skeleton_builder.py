@@ -4,11 +4,14 @@ from app.domain.enums.landmark_names import LandmarksNames
 
 class SkeletonBuilder:
 
-    def build(self, mp_result, width: int, height: int) -> list:
-        if not mp_result.pose_landmarks:
+    def __init__(self):
+        self.visibility_threshold = 0.7
+
+    def build(self, smooth_mp_result, width: int, height: int) -> list:
+        if not smooth_mp_result:
             return []
 
-        landmarks = mp_result.pose_landmarks[0]
+        landmarks = smooth_mp_result
 
         joints = []
 
@@ -54,8 +57,8 @@ class SkeletonBuilder:
         return joints
 
     def _px(self, lm, width, height):
-        return lm.x * width, lm.y * height
-    
+        return lm[0] * width, lm[1] * height
+
     def _landmark_to_joint2d(self, landmark, name: str, parent_index: int, width: int, height: int) -> Joint2D:
         x, y = self._px(landmark, width, height)
-        return Joint2D(name=name, parent_index=parent_index, x=x, y=y)
+        return Joint2D(name=name, parent_index=parent_index, x=x, y=y, is_visible=landmark[3] > self.visibility_threshold)

@@ -4,7 +4,6 @@
     <SolutionPath>../src/dotnet/MotionCapture.slnx</SolutionPath>
     <ContractsDir>../src/contracts</ContractsDir>
     <PythonDir>../src/python/motion</PythonDir>
-    <PythonContractsDir>../src/python/motion/contracts</PythonContractsDir>
   </PropertyGroup>
 
   <!-- CLEAN -->
@@ -19,13 +18,12 @@
     <Message Text="Cleaning Python generated files..." Importance="high"/>
 
     <ItemGroup>
-      <GeneratedPythonFiles Include="$(PythonContractsDir)\*.py"
-                            Exclude="$(PythonContractsDir)\__init__.py" />
-      <GeneratedPythonStubs Include="$(PythonContractsDir)\*.pyi" />
+      <ContractSubdirs Include="motion;calibration;camera;health" />
+      <FilesToClean Include="$(PythonDir)/contracts/%(ContractSubdirs.Identity)/*.py"
+                    Exclude="$(PythonDir)/contracts/%(ContractSubdirs.Identity)/__init__.py" />
+      <FilesToClean Include="$(PythonDir)/contracts/%(ContractSubdirs.Identity)/*.pyi" />
     </ItemGroup>
-
-    <Delete Files="@(GeneratedPythonFiles)" />
-    <Delete Files="@(GeneratedPythonStubs)" />
+    <Delete Files="@(FilesToClean)" />
   </Target>
 
   <!-- BUILD DOTNET -->
@@ -40,13 +38,18 @@
   </Target>
 
   <!-- GENERATE PYTHON PROTO -->
-  <Target Name="GenerateProtoPython">
-    <Exec
-      Condition="'@(GeneratedFiles)' == ''"
-      Command="&quot;..\src\python\motion\venv\Scripts\python.exe&quot; -m grpc_tools.protoc -I$(ContractsDir) --python_out=$(PythonContractsDir) --grpc_python_out=$(PythonContractsDir) --pyi_out=$(PythonContractsDir) $(ContractsDir)\*" />
+  <Target Name="GenerateAllProtoPython">
+    <ItemGroup>
+      <ProtoFiles Include="$(ContractsDir)\motion\*.proto" />
+      <ProtoFiles Include="$(ContractsDir)\calibration\*.proto" />
+      <ProtoFiles Include="$(ContractsDir)\camera\*.proto" />
+      <ProtoFiles Include="$(ContractsDir)\health\*.proto" />
+    </ItemGroup>
+
+    <Exec Command="&quot;..\src\python\motion\venv\Scripts\python.exe&quot; -m grpc_tools.protoc -I$(ContractsDir) --python_out=$(PythonDir)/contracts --grpc_python_out=$(PythonDir)/contracts --pyi_out=$(PythonDir)/contracts @(ProtoFiles, ' ')" />
   </Target>
 
   <!-- BUILD ALL -->
-  <Target Name="BuildAll" DependsOnTargets="GenerateProtoPython;BuildDotNet" />
+  <Target Name="BuildAll" DependsOnTargets="GenerateAllProtoPython;BuildDotNet" />
 
 </Project>

@@ -6,4 +6,5 @@ public class Joint2D
     public int ParentIndex { get; set; }
     public int X { get; set; }
     public int Y { get; set; }
+    public bool IsVisible { get; set; }
 }
