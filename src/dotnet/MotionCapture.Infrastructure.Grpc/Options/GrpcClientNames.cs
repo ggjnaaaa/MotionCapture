@@ -1,4 +1,4 @@
-﻿namespace MotionCapture.Infrastructure.Grpc.Options;
+﻿namespace MotionCapture.Infrastructure.GrpcClient.Options;
 
 public static class GrpcClientNames
 {

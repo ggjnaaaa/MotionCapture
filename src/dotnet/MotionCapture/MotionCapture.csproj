@@ -23,7 +23,7 @@
     <ItemGroup>
 		<ProjectReference Include="..\MotionCapture.Core\MotionCapture.Core.csproj"></ProjectReference>
 		<ProjectReference Include="..\MotionCapture.Infrastructure.Camera\MotionCapture.Infrastructure.Camera.csproj"></ProjectReference>
-		<ProjectReference Include="..\MotionCapture.Infrastructure.Grpc\MotionCapture.Infrastructure.Grpc.csproj" />
+		<ProjectReference Include="..\MotionCapture.Infrastructure.GrpcClient\MotionCapture.Infrastructure.GrpcClient.csproj" />
     </ItemGroup>
 	
     <ItemGroup>

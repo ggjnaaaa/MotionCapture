@@ -4,10 +4,10 @@ using MotionCapture.Core.Enums;
 using MotionCapture.Core.Interfaces;
 using MotionCapture.Grpc.Contracts.Health;
 using MotionCapture.Grpc.Contracts.Motion;
-using MotionCapture.Infrastructure.Grpc.Options;
-using MotionCapture.Infrastructure.Grpc.Repositories;
+using MotionCapture.Infrastructure.GrpcClient.Options;
+using MotionCapture.Infrastructure.GrpcClient.Repositories;
 
-namespace MotionCapture.Infrastructure.Grpc.Services;
+namespace MotionCapture.Infrastructure.GrpcClient.Services;
 
 public class ConnectionStateService : IConnectionStateService
 {

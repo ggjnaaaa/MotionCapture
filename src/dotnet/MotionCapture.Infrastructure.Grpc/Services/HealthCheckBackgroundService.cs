@@ -4,9 +4,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MotionCapture.Core.Interfaces;
 using MotionCapture.Grpc.Contracts.Health;
-using MotionCapture.Infrastructure.Grpc.Options;
+using MotionCapture.Infrastructure.GrpcClient.Options;
 
-namespace MotionCapture.Infrastructure.Grpc.Services;
+namespace MotionCapture.Infrastructure.GrpcClient.Services;
 
 public class HealthCheckBackgroundService : BackgroundService
 {

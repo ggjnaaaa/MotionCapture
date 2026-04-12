@@ -1,9 +1,9 @@
 ﻿using Grpc.Core;
 using Grpc.Net.ClientFactory;
 using MotionCapture.Grpc.Contracts.Calibration;
-using MotionCapture.Infrastructure.Grpc.Options;
+using MotionCapture.Infrastructure.GrpcClient.Options;
 
-namespace MotionCapture.Infrastructure.Grpc.Repositories;
+namespace MotionCapture.Infrastructure.GrpcClient.Repositories;
 
 public class CalibrationGrpcClient : ICalibrationGrpcClient
 {

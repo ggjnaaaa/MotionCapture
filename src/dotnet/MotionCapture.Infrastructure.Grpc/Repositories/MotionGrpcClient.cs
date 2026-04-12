@@ -5,9 +5,9 @@ using MotionCapture.Core.Interfaces;
 using MotionCapture.Core.Models;
 using MotionCapture.Grpc.Contracts;
 using MotionCapture.Grpc.Contracts.Motion;
-using MotionCapture.Infrastructure.Grpc.Options;
+using MotionCapture.Infrastructure.GrpcClient.Options;
 
-namespace MotionCapture.Infrastructure.Grpc.Repositories;
+namespace MotionCapture.Infrastructure.GrpcClient.Repositories;
 
 public class MotionGrpcClient : IMotionGrpcClient
 {

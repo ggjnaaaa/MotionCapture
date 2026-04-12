@@ -3,7 +3,7 @@ using Grpc.Core;
 using MotionCapture.Core.Interfaces;
 using MotionCapture.Core.Models;
 using MotionCapture.Grpc.Contracts.Calibration;
-using MotionCapture.Infrastructure.Grpc.Repositories;
+using MotionCapture.Infrastructure.GrpcClient.Repositories;
 
 namespace MotionCapture.Infrastructure.Camera.Services;
 

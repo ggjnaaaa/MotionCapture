@@ -4,14 +4,14 @@ using Grpc.Net.ClientFactory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MotionCapture.Core.Interfaces;
-using MotionCapture.Infrastructure.Grpc.Interceptors;
-using MotionCapture.Infrastructure.Grpc.Mapping;
-using MotionCapture.Infrastructure.Grpc.Options;
-using MotionCapture.Infrastructure.Grpc.Repositories;
-using MotionCapture.Infrastructure.Grpc.Services;
+using MotionCapture.Infrastructure.GrpcClient.Interceptors;
+using MotionCapture.Infrastructure.GrpcClient.Mapping;
+using MotionCapture.Infrastructure.GrpcClient.Options;
+using MotionCapture.Infrastructure.GrpcClient.Repositories;
+using MotionCapture.Infrastructure.GrpcClient.Services;
 using System.Net.Http;
 
-namespace MotionCapture.Infrastructure.Grpc.Extensions;
+namespace MotionCapture.Infrastructure.GrpcClient.Extensions;
 
 public static class DependencyInjection
 {

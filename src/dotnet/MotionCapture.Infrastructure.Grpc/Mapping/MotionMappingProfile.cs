@@ -5,7 +5,7 @@ using FrameLandmarks2D = MotionCapture.Grpc.Contracts.Motion.FrameLandmarks2D;
 using Joint2D = MotionCapture.Grpc.Contracts.Motion.Joint2D;
 using Joint3D = MotionCapture.Grpc.Contracts.Motion.Joint3D;
 
-namespace MotionCapture.Infrastructure.Grpc.Mapping;
+namespace MotionCapture.Infrastructure.GrpcClient.Mapping;
 
 public class MotionMappingProfile : Profile
 {

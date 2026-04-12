@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MotionCapture.Controls;
 using MotionCapture.Core.Enums;
 using MotionCapture.Core.Interfaces;
-using MotionCapture.Infrastructure.Grpc.Repositories;
+using MotionCapture.Infrastructure.GrpcClient.Repositories;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 

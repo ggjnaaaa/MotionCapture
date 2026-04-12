@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MotionCapture.Infrastructure.Camera.Extensions;
-using MotionCapture.Infrastructure.Grpc.Extensions;
+using MotionCapture.Infrastructure.GrpcClient.Extensions;
 using MotionCapture.Services;
 using MotionCapture.ViewModels;
 using MotionCapture.Views;

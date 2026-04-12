@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using MotionCapture.Core.Interfaces;
 
-namespace MotionCapture.Infrastructure.Grpc.Interceptors;
+namespace MotionCapture.Infrastructure.GrpcClient.Interceptors;
 
 public class ErrorHandlingStreamReader<T> : IAsyncStreamReader<T>
 {

@@ -1,4 +1,4 @@
-namespace MotionCapture.Infrastructure.Grpc.Repositories;
+namespace MotionCapture.Infrastructure.GrpcClient.Repositories;
 
 public interface ICameraGrpcClient
 {

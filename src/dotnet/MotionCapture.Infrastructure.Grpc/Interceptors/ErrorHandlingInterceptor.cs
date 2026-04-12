@@ -2,7 +2,7 @@
 using Grpc.Core.Interceptors;
 using MotionCapture.Core.Interfaces;
 
-namespace MotionCapture.Infrastructure.Grpc.Interceptors;
+namespace MotionCapture.Infrastructure.GrpcClient.Interceptors;
 
 public class ErrorHandlingInterceptor : Interceptor
 {
