@@ -7,6 +7,7 @@ namespace MotionCapture.Services;
 public class ProcessingOrchestrator
 {
     private EmguSkeletonDrawingService _drawingService;
+    private readonly ISkeletonProcessor _skeletonProcessor;
     private readonly object _frameLock = new();
     private readonly Dictionary<int, Mat> _lastFrames = new();
 
@@ -18,11 +19,13 @@ public class ProcessingOrchestrator
         IMotionTrackingService motionTrackingService,
         IFrameSyncBuffer frameSyncBuffer,
         ICameraCaptureService cameraCaptureService,
+        ISkeletonProcessor skeletonProcessor,
         ApplicationState state,
         EmguSkeletonDrawingService drawingService
     )
     {
         _drawingService = drawingService;
+        _skeletonProcessor = skeletonProcessor;
 
         cameraCaptureService.FrameArrived += UpdateFrame;
 
@@ -72,6 +75,8 @@ public class ProcessingOrchestrator
             FrameReady?.Invoke(null);
             return;
         }
+
+        _skeletonProcessor.Process(result);
 
         Dictionary<int, Mat> drawResults = new Dictionary<int, Mat>();
 

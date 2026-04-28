@@ -1,6 +1,6 @@
 ﻿from typing import List
 from contracts.motion import motion_messages_pb2
-from app.domain.models import CameraFrame, Joint2D, Joint3D, FrameLandmarks2D
+from app.domain.models import CameraFrame, Joint2D, JointPosition3D, FrameLandmarks2D
 from contracts.calibration import calibration_messages_pb2
 
 
@@ -25,28 +25,25 @@ class ProtoMapper:
             parent_index=domain_joint.parent_index,
             x=domain_joint.x,
             y=domain_joint.y,
+            depth=domain_joint.depth,
             is_visible=domain_joint.is_visible
         )
 
     @staticmethod
-    def to_proto_joint3d(domain_joint: Joint3D) -> motion_messages_pb2.Joint3D:
-        return motion_messages_pb2.Joint3D(
+    def to_proto_jointPosition3d(domain_joint: JointPosition3D) -> motion_messages_pb2.JointPosition3D:
+        return motion_messages_pb2.JointPosition3D(
             name=domain_joint.name,
             parent_index=domain_joint.parent_index,
             pos_x=domain_joint.pos_x,
             pos_y=domain_joint.pos_y,
-            pos_z=domain_joint.pos_z,
-            rot_x=domain_joint.rot_x,
-            rot_y=domain_joint.rot_y,
-            rot_z=domain_joint.rot_z,
-            rot_w=domain_joint.rot_w
+            pos_z=domain_joint.pos_z
         )
 
     @staticmethod
-    def to_proto_response(domain_frame_landmarks: FrameLandmarks2D, joints: List[Joint3D]) -> motion_messages_pb2.MotionResponse:
+    def to_proto_response(domain_frame_landmarks: FrameLandmarks2D, joints: List[JointPosition3D]) -> motion_messages_pb2.MotionResponse:
         return motion_messages_pb2.MotionResponse(
             joints=[
-                ProtoMapper.to_proto_joint3d(j)
+                ProtoMapper.to_proto_jointPosition3d(j)
                 for j in joints
             ],
             frames_to_draw=[

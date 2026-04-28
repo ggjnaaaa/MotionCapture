@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="16.0.0" />
+    <PackageReference Include="Google.Protobuf" Version="3.34.0" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.76.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.78.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MotionCapture.Core\MotionCapture.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="..\..\contracts\skeleton\skeleton_messages.proto" GrpcServices="None" ProtoRoot="..\..\contracts" />
+    <Protobuf Include="..\..\contracts\skeleton\skeleton_service.proto" GrpcServices="Server" ProtoRoot="..\..\contracts" />
+  </ItemGroup>
+
+</Project>

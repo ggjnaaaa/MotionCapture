@@ -78,7 +78,6 @@ public class EmguSkeletonDrawingService
     {
         var result = frame.Clone();
 
-        // затемнение (накладываем полупрозрачный черный слой)
         using var overlay = new Mat(result.Size, Emgu.CV.CvEnum.DepthType.Cv8U, 3);
         overlay.SetTo(new MCvScalar(0, 0, 0));
 

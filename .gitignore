@@ -1,5 +1,8 @@
 ﻿*.task
 *.npz
+*.log
+.cr/
+*.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

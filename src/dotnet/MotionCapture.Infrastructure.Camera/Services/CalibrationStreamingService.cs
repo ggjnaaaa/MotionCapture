@@ -75,14 +75,7 @@ public class CalibrationStreamingService : ICalibrationService
 
         var request = new CalibrationFrame();
         foreach (var frameToSend in cameraFrames)
-        {
-            request.Frames.Add(new MotionCapture.Grpc.Contracts.Motion.CameraFrame
-            {
-                CameraIndex = frameToSend.CameraIndex,
-                TimestampMs = frameToSend.Timestamp,
-                Image = Google.Protobuf.ByteString.CopyFrom(frameToSend.ImageBytes)
-            });
-        }
+            request.Frames.Add(_mapper.Map<MotionCapture.Grpc.Contracts.Motion.CameraFrame>(frameToSend));
 
         await _call.RequestStream.WriteAsync(request);
     }

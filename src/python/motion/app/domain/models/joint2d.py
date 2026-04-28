@@ -7,4 +7,5 @@ class Joint2D:
     parent_index: int
     x: float
     y: float
+    depth: float
     is_visible: bool

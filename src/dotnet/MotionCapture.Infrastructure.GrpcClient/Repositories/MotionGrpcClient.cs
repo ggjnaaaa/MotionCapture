@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using Google.Protobuf.WellKnownTypes;
 using Grpc.Net.ClientFactory;
 using MotionCapture.Core.Interfaces;
 using MotionCapture.Core.Models;
-using MotionCapture.Grpc.Contracts;
 using MotionCapture.Grpc.Contracts.Motion;
 using MotionCapture.Infrastructure.GrpcClient.Options;
 
@@ -27,17 +25,7 @@ public class MotionGrpcClient : IMotionGrpcClient
 
     public async Task<MotionResult?> ProcessAsync(IEnumerable<Core.Models.CameraFrame> batch, CancellationToken ct)
     {
-        var request = new MotionRequest();
-
-        foreach (var frame in batch)
-        {
-            request.Frames.Add(new MotionCapture.Grpc.Contracts.Motion.CameraFrame
-            {
-                CameraIndex = frame.CameraIndex,
-                TimestampMs = frame.Timestamp,
-                Image = Google.Protobuf.ByteString.CopyFrom(frame.ImageBytes)
-            });
-        }
+        var request = _mapper.Map<MotionRequest>(batch);
 
         var response = await _client.ProcessMotionAsync(request, cancellationToken: ct);
 

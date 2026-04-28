@@ -10,9 +10,10 @@ from app.domain.models.frame_landmarks2d import FrameLandmarks2D
 from app.domain.models.joint2d import Joint2D
 
 CHESSBOARD_SIZE = (9, 6)
-SQUARE_SIZE = 1.0
-REQUIRED_FRAMES = 20
+SQUARE_SIZE = 2.0
+REQUIRED_FRAMES = 50
 QUALITY_THRESHOLD = 5.0 
+IS_DEBUG = True
 
 
 class CalibrationHandler(calibration_service_pb2_grpc.CalibrationServiceServicer):
@@ -25,6 +26,7 @@ class CalibrationHandler(calibration_service_pb2_grpc.CalibrationServiceServicer
         self.mode = None
         self.objpoints = []
         self.imgpoints = {}
+        self.img_sizes = {}
         self.last_corners = {}
         self.collected = 0
 
@@ -55,12 +57,15 @@ class CalibrationHandler(calibration_service_pb2_grpc.CalibrationServiceServicer
         if cam_index in self.last_corners:
             diff = np.linalg.norm(corners - self.last_corners[cam_index])
             if diff < QUALITY_THRESHOLD:
+                self.logger.info(f"Frame rejected due to low quality (diff={diff:.2f})")
                 return False
         return True
     
     async def process_camera(self, cam_index, frame):
         img = self._bytes_to_image(frame.image)
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        h, w = gray.shape[:2]
+        self.img_sizes[cam_index] = [h, w]
         ret, corners = cv2.findChessboardCorners(gray, CHESSBOARD_SIZE, None)
         return cam_index, ret, corners
 
@@ -95,12 +100,26 @@ class CalibrationHandler(calibration_service_pb2_grpc.CalibrationServiceServicer
             all_success = True
             corners_by_cam = {}
             landmarks_response = []
+            images_for_debug = {}
+
             for cam_index, ret, corners in results:
+                if IS_DEBUG:
+                    img = self._bytes_to_image(frames_by_cam[cam_index].image)
+                    images_for_debug[cam_index] = (img, None)
+
                 if not ret or not self.quality_check(corners, cam_index):
                     self.logger.info("Frame rejected")
                     all_success = False
                     break
                 corners_by_cam[cam_index] = corners
+            
+            if IS_DEBUG:
+                for cam_index, (img, corners) in images_for_debug.items():
+                    window_name = f"Camera {cam_index}"
+                    if corners is not None:
+                        cv2.drawChessboardCorners(img, CHESSBOARD_SIZE, corners, True)
+                    cv2.imshow(window_name, img)
+                cv2.waitKey(1)
 
             if not all_success:
                 self.logger.info("Frame rejected: chessboard not found on all cameras")
@@ -126,7 +145,7 @@ class CalibrationHandler(calibration_service_pb2_grpc.CalibrationServiceServicer
                     x, y = c.ravel()
                     joints.append(Joint2D(
                         name="corner", parent_index=-1,
-                        x=float(x), y=float(y), is_visible=True
+                        x=float(x), y=float(y), depth=0, is_visible=True
                     ))
                 landmarks_response.append(
                     FrameLandmarks2D(
@@ -164,6 +183,9 @@ class CalibrationHandler(calibration_service_pb2_grpc.CalibrationServiceServicer
         result = self._calibrate()
         self.logger.info("Calibration complete")
 
+        if IS_DEBUG:
+            cv2.destroyAllWindows()
+
         yield self.proto_mapper.to_calibration_response(
             frames_collected=self.collected,
             frames_required=REQUIRED_FRAMES,
@@ -174,14 +196,16 @@ class CalibrationHandler(calibration_service_pb2_grpc.CalibrationServiceServicer
         )
 
     def _calibrate(self):
+        self.logger.info("Calibrating...")
         cams = list(self.imgpoints.keys())
 
         if len(cams) == 1:
             cam = cams[0]
             imgpoints = self.imgpoints[cam]
 
-            h, w = 720, 1280
+            h, w = self.img_sizes[cam]
 
+            self.logger.info("Running single camera calibration...")
             _, mtx, dist, _, _ = cv2.calibrateCamera(
                 self.objpoints,
                 imgpoints,
@@ -190,6 +214,7 @@ class CalibrationHandler(calibration_service_pb2_grpc.CalibrationServiceServicer
                 None
             )
 
+            self.logger.info("Single camera calibration complete")
             np.savez("calibration_single.npz",
                      mtx=mtx,
                      dist=dist)
@@ -200,15 +225,19 @@ class CalibrationHandler(calibration_service_pb2_grpc.CalibrationServiceServicer
             imgpoints1 = self.imgpoints[cam1]
             imgpoints2 = self.imgpoints[cam2]
 
-            h, w = 720, 1280
+            h1, w1 = self.img_sizes[cam1]
+            h2, w2 = self.img_sizes[cam2]
 
+            self.logger.info("Running stereo calibration...")
             _, mtx1, dist1, _, _ = cv2.calibrateCamera(
-                self.objpoints, imgpoints1, (w, h), None, None)
+                self.objpoints, imgpoints1, (w1, h1), None, None)
 
+            self.logger.info("Stereo calibration complete for first camera. Calibrating second camera...")
             _, mtx2, dist2, _, _ = cv2.calibrateCamera(
-                self.objpoints, imgpoints2, (w, h), None, None)
+                self.objpoints, imgpoints2, (w2, h2), None, None)
 
-            _, _, _, _, _, R, T, _, _ = cv2.stereoCalibrate(
+            self.logger.info("Stereo calibration complete for second camera. Computing stereo parameters...")
+            ret, mtx1_opt, dist1_opt, mtx2_opt, dist2_opt, R, T, E, F = cv2.stereoCalibrate(
                 self.objpoints,
                 imgpoints1,
                 imgpoints2,
@@ -219,10 +248,11 @@ class CalibrationHandler(calibration_service_pb2_grpc.CalibrationServiceServicer
                 (w, h)
             )
 
+            self.logger.info("Stereo calibration complete")
             np.savez("calibration_stereo.npz",
-                     mtx1=mtx1, dist1=dist1,
-                     mtx2=mtx2, dist2=dist2,
-                     R=R, T=T)
+                mtx1=mtx1_opt, dist1=dist1_opt,
+                mtx2=mtx2_opt, dist2=dist2_opt,
+                R=R, T=T)
 
     def _bytes_to_image(self, image_bytes):
         np_arr = np.frombuffer(image_bytes, np.uint8)

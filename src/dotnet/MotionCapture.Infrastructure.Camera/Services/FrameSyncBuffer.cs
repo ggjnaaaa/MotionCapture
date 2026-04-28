@@ -13,7 +13,7 @@ public class FrameSyncBuffer : IFrameSyncBuffer, IDisposable
 
     private readonly object _lock = new();
 
-    private int _fps = 15;
+    private int _fps = 30;
     private CancellationTokenSource _cts = new();
     private Task? _loopTask;
 

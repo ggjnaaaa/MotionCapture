@@ -61,4 +61,4 @@ class SkeletonBuilder:
 
     def _landmark_to_joint2d(self, landmark, name: str, parent_index: int, width: int, height: int) -> Joint2D:
         x, y = self._px(landmark, width, height)
-        return Joint2D(name=name, parent_index=parent_index, x=x, y=y, is_visible=landmark[3] > self.visibility_threshold)
+        return Joint2D(name=name, parent_index=parent_index, x=x, y=y, depth=landmark[2], is_visible=landmark[3] > self.visibility_threshold)

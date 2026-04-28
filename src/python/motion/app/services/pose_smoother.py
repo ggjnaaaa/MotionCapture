@@ -6,7 +6,7 @@ class PoseSmoother:
     def __init__(self, alpha=0.2):
         self.alpha = alpha
         self.prev = None
-        self.visibility_threshold = 0.7
+        self.visibility_threshold = -10
 
     def smooth(self, joints):
         if self.prev is None:
@@ -20,7 +20,7 @@ class PoseSmoother:
                 result.append(prev)
                 continue
         
-            self.calc_alpha(curr, prev)
+            # self.calc_alpha(curr, prev)
 
             x = prev[0] * (1 - self.alpha) + curr.x * self.alpha
             y = prev[1] * (1 - self.alpha) + curr.y * self.alpha

@@ -23,10 +23,9 @@ _sym_db = _symbol_database.Default()
 
 
 from motion import motion_messages_pb2 as motion_dot_motion__messages__pb2
-from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1bmotion/motion_service.proto\x12\x06motion\x1a\x1cmotion/motion_messages.proto\x1a\x1bgoogle/protobuf/empty.proto2O\n\rMotionService\x12>\n\rProcessMotion\x12\x15.motion.MotionRequest\x1a\x16.motion.MotionResponseB&\xaa\x02#MotionCapture.Grpc.Contracts.Motionb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1bmotion/motion_service.proto\x12\x06motion\x1a\x1cmotion/motion_messages.proto2O\n\rMotionService\x12>\n\rProcessMotion\x12\x15.motion.MotionRequest\x1a\x16.motion.MotionResponseB&\xaa\x02#MotionCapture.Grpc.Contracts.Motionb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -34,6 +33,6 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'motion.motion_service_pb2',
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\252\002#MotionCapture.Grpc.Contracts.Motion'
-  _globals['_MOTIONSERVICE']._serialized_start=98
-  _globals['_MOTIONSERVICE']._serialized_end=177
+  _globals['_MOTIONSERVICE']._serialized_start=69
+  _globals['_MOTIONSERVICE']._serialized_end=148
 # @@protoc_insertion_point(module_scope)

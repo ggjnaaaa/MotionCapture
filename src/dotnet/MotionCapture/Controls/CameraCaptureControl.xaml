@@ -6,18 +6,20 @@
              xmlns:local="clr-namespace:MotionCapture.Controls"
              xmlns:converters="clr-namespace:MotionCapture.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="600"
-             Background="Aqua">
+             d:DesignHeight="200" d:DesignWidth="600">
     <UserControl.Resources>
         <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
     </UserControl.Resources>
+    <UserControl.Background>
+        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuBarColorKey}}"/>
+    </UserControl.Background>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150" />
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        
+
         <ComboBox ItemsSource="{Binding AvailableCameras}"
                   SelectedItem="{Binding SelectedCamera}"
                   DisplayMemberPath="Name"

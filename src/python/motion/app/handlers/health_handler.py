@@ -9,4 +9,5 @@ class HealthCheckHandler(health_check_service_pb2_grpc.HealthCheckServiceService
     logger = logging.getLogger(__name__)
 
     async def CheckHealth(self, request, context):
+        self.logger.info("Health check")
         return empty_pb2.Empty()

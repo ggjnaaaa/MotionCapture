@@ -17,18 +17,20 @@ class CameraFrame(_message.Message):
     def __init__(self, camera_index: _Optional[int] = ..., timestamp_ms: _Optional[int] = ..., image: _Optional[bytes] = ...) -> None: ...
 
 class Joint2D(_message.Message):
-    __slots__ = ("name", "parent_index", "x", "y", "is_visible")
+    __slots__ = ("name", "parent_index", "x", "y", "depth", "is_visible")
     NAME_FIELD_NUMBER: _ClassVar[int]
     PARENT_INDEX_FIELD_NUMBER: _ClassVar[int]
     X_FIELD_NUMBER: _ClassVar[int]
     Y_FIELD_NUMBER: _ClassVar[int]
+    DEPTH_FIELD_NUMBER: _ClassVar[int]
     IS_VISIBLE_FIELD_NUMBER: _ClassVar[int]
     name: str
     parent_index: int
     x: float
     y: float
+    depth: float
     is_visible: bool
-    def __init__(self, name: _Optional[str] = ..., parent_index: _Optional[int] = ..., x: _Optional[float] = ..., y: _Optional[float] = ..., is_visible: bool = ...) -> None: ...
+    def __init__(self, name: _Optional[str] = ..., parent_index: _Optional[int] = ..., x: _Optional[float] = ..., y: _Optional[float] = ..., depth: _Optional[float] = ..., is_visible: bool = ...) -> None: ...
 
 class FrameLandmarks2D(_message.Message):
     __slots__ = ("joints2d", "source_camera_index", "timestamp_ms")
@@ -40,27 +42,19 @@ class FrameLandmarks2D(_message.Message):
     timestamp_ms: int
     def __init__(self, joints2d: _Optional[_Iterable[_Union[Joint2D, _Mapping]]] = ..., source_camera_index: _Optional[int] = ..., timestamp_ms: _Optional[int] = ...) -> None: ...
 
-class Joint3D(_message.Message):
-    __slots__ = ("name", "parent_index", "pos_x", "pos_y", "pos_z", "rot_x", "rot_y", "rot_z", "rot_w")
+class JointPosition3D(_message.Message):
+    __slots__ = ("name", "parent_index", "pos_x", "pos_y", "pos_z")
     NAME_FIELD_NUMBER: _ClassVar[int]
     PARENT_INDEX_FIELD_NUMBER: _ClassVar[int]
     POS_X_FIELD_NUMBER: _ClassVar[int]
     POS_Y_FIELD_NUMBER: _ClassVar[int]
     POS_Z_FIELD_NUMBER: _ClassVar[int]
-    ROT_X_FIELD_NUMBER: _ClassVar[int]
-    ROT_Y_FIELD_NUMBER: _ClassVar[int]
-    ROT_Z_FIELD_NUMBER: _ClassVar[int]
-    ROT_W_FIELD_NUMBER: _ClassVar[int]
     name: str
     parent_index: int
     pos_x: float
     pos_y: float
     pos_z: float
-    rot_x: float
-    rot_y: float
-    rot_z: float
-    rot_w: float
-    def __init__(self, name: _Optional[str] = ..., parent_index: _Optional[int] = ..., pos_x: _Optional[float] = ..., pos_y: _Optional[float] = ..., pos_z: _Optional[float] = ..., rot_x: _Optional[float] = ..., rot_y: _Optional[float] = ..., rot_z: _Optional[float] = ..., rot_w: _Optional[float] = ...) -> None: ...
+    def __init__(self, name: _Optional[str] = ..., parent_index: _Optional[int] = ..., pos_x: _Optional[float] = ..., pos_y: _Optional[float] = ..., pos_z: _Optional[float] = ...) -> None: ...
 
 class MotionRequest(_message.Message):
     __slots__ = ("frames",)
@@ -72,6 +66,6 @@ class MotionResponse(_message.Message):
     __slots__ = ("joints", "frames_to_draw")
     JOINTS_FIELD_NUMBER: _ClassVar[int]
     FRAMES_TO_DRAW_FIELD_NUMBER: _ClassVar[int]
-    joints: _containers.RepeatedCompositeFieldContainer[Joint3D]
+    joints: _containers.RepeatedCompositeFieldContainer[JointPosition3D]
     frames_to_draw: _containers.RepeatedCompositeFieldContainer[FrameLandmarks2D]
-    def __init__(self, joints: _Optional[_Iterable[_Union[Joint3D, _Mapping]]] = ..., frames_to_draw: _Optional[_Iterable[_Union[FrameLandmarks2D, _Mapping]]] = ...) -> None: ...
+    def __init__(self, joints: _Optional[_Iterable[_Union[JointPosition3D, _Mapping]]] = ..., frames_to_draw: _Optional[_Iterable[_Union[FrameLandmarks2D, _Mapping]]] = ...) -> None: ...

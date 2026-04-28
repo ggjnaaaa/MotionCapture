@@ -15,7 +15,7 @@
     <PackageReference Include="Emgu.CV.runtime.windows" Version="4.12.0.5764" />
     <PackageReference Include="Emgu.CV.UI" Version="4.12.0.5764" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.3" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.5" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.3" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.3" />
   </ItemGroup>
@@ -24,6 +24,8 @@
 		<ProjectReference Include="..\MotionCapture.Core\MotionCapture.Core.csproj"></ProjectReference>
 		<ProjectReference Include="..\MotionCapture.Infrastructure.Camera\MotionCapture.Infrastructure.Camera.csproj"></ProjectReference>
 		<ProjectReference Include="..\MotionCapture.Infrastructure.GrpcClient\MotionCapture.Infrastructure.GrpcClient.csproj" />
+		<ProjectReference Include="..\MotionCapture.Infrastructure.GrpcServer\MotionCapture.Infrastructure.GrpcServer.csproj" />
+		<ProjectReference Include="..\MotionCapture.Processing\MotionCapture.Processing.csproj" />
     </ItemGroup>
 	
     <ItemGroup>

@@ -1,0 +1,24 @@
+﻿syntax = "proto3";
+option csharp_namespace = "MotionCapture.Grpc.Contracts.Skeleton";
+package skeleton;
+
+message SkeletonJoint {
+    string name = 1;
+    int32 parent_index = 2;
+
+    float pos_x = 3;
+    float pos_y = 4;
+    float pos_z = 5;
+
+    float rot_x = 6;
+    float rot_y = 7;
+    float rot_z = 8;
+    float rot_w = 9;
+}
+
+message Skeleton {
+    repeated SkeletonJoint joints = 1;
+    int64 timestamp_ms = 2;
+}
+
+message SkeletonRequest {}

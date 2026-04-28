@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1cmotion/motion_messages.proto\x12\x06motion\"H\n\x0b\x43\x61meraFrame\x12\x14\n\x0c\x63\x61mera_index\x18\x01 \x01(\x05\x12\x14\n\x0ctimestamp_ms\x18\x02 \x01(\x03\x12\r\n\x05image\x18\x03 \x01(\x0c\"W\n\x07Joint2D\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x14\n\x0cparent_index\x18\x02 \x01(\x05\x12\t\n\x01x\x18\x03 \x01(\x02\x12\t\n\x01y\x18\x04 \x01(\x02\x12\x12\n\nis_visible\x18\x05 \x01(\x08\"h\n\x10\x46rameLandmarks2D\x12!\n\x08joints2d\x18\x01 \x03(\x0b\x32\x0f.motion.Joint2D\x12\x1b\n\x13source_camera_index\x18\x02 \x01(\x05\x12\x14\n\x0ctimestamp_ms\x18\x03 \x01(\x03\"\x96\x01\n\x07Joint3D\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x14\n\x0cparent_index\x18\x02 \x01(\x05\x12\r\n\x05pos_x\x18\x03 \x01(\x02\x12\r\n\x05pos_y\x18\x04 \x01(\x02\x12\r\n\x05pos_z\x18\x05 \x01(\x02\x12\r\n\x05rot_x\x18\x06 \x01(\x02\x12\r\n\x05rot_y\x18\x07 \x01(\x02\x12\r\n\x05rot_z\x18\x08 \x01(\x02\x12\r\n\x05rot_w\x18\t \x01(\x02\"4\n\rMotionRequest\x12#\n\x06\x66rames\x18\x01 \x03(\x0b\x32\x13.motion.CameraFrame\"c\n\x0eMotionResponse\x12\x1f\n\x06joints\x18\x01 \x03(\x0b\x32\x0f.motion.Joint3D\x12\x30\n\x0e\x66rames_to_draw\x18\x02 \x03(\x0b\x32\x18.motion.FrameLandmarks2DB&\xaa\x02#MotionCapture.Grpc.Contracts.Motionb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1cmotion/motion_messages.proto\x12\x06motion\"H\n\x0b\x43\x61meraFrame\x12\x14\n\x0c\x63\x61mera_index\x18\x01 \x01(\x05\x12\x14\n\x0ctimestamp_ms\x18\x02 \x01(\x03\x12\r\n\x05image\x18\x03 \x01(\x0c\"f\n\x07Joint2D\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x14\n\x0cparent_index\x18\x02 \x01(\x05\x12\t\n\x01x\x18\x03 \x01(\x02\x12\t\n\x01y\x18\x04 \x01(\x02\x12\r\n\x05\x64\x65pth\x18\x05 \x01(\x02\x12\x12\n\nis_visible\x18\x06 \x01(\x08\"h\n\x10\x46rameLandmarks2D\x12!\n\x08joints2d\x18\x01 \x03(\x0b\x32\x0f.motion.Joint2D\x12\x1b\n\x13source_camera_index\x18\x02 \x01(\x05\x12\x14\n\x0ctimestamp_ms\x18\x03 \x01(\x03\"b\n\x0fJointPosition3D\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x14\n\x0cparent_index\x18\x02 \x01(\x05\x12\r\n\x05pos_x\x18\x03 \x01(\x02\x12\r\n\x05pos_y\x18\x04 \x01(\x02\x12\r\n\x05pos_z\x18\x05 \x01(\x02\"4\n\rMotionRequest\x12#\n\x06\x66rames\x18\x01 \x03(\x0b\x32\x13.motion.CameraFrame\"k\n\x0eMotionResponse\x12\'\n\x06joints\x18\x01 \x03(\x0b\x32\x17.motion.JointPosition3D\x12\x30\n\x0e\x66rames_to_draw\x18\x02 \x03(\x0b\x32\x18.motion.FrameLandmarks2DB&\xaa\x02#MotionCapture.Grpc.Contracts.Motionb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -35,13 +35,13 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_CAMERAFRAME']._serialized_start=40
   _globals['_CAMERAFRAME']._serialized_end=112
   _globals['_JOINT2D']._serialized_start=114
-  _globals['_JOINT2D']._serialized_end=201
-  _globals['_FRAMELANDMARKS2D']._serialized_start=203
-  _globals['_FRAMELANDMARKS2D']._serialized_end=307
-  _globals['_JOINT3D']._serialized_start=310
-  _globals['_JOINT3D']._serialized_end=460
-  _globals['_MOTIONREQUEST']._serialized_start=462
-  _globals['_MOTIONREQUEST']._serialized_end=514
-  _globals['_MOTIONRESPONSE']._serialized_start=516
-  _globals['_MOTIONRESPONSE']._serialized_end=615
+  _globals['_JOINT2D']._serialized_end=216
+  _globals['_FRAMELANDMARKS2D']._serialized_start=218
+  _globals['_FRAMELANDMARKS2D']._serialized_end=322
+  _globals['_JOINTPOSITION3D']._serialized_start=324
+  _globals['_JOINTPOSITION3D']._serialized_end=422
+  _globals['_MOTIONREQUEST']._serialized_start=424
+  _globals['_MOTIONREQUEST']._serialized_end=476
+  _globals['_MOTIONRESPONSE']._serialized_start=478
+  _globals['_MOTIONRESPONSE']._serialized_end=585
 # @@protoc_insertion_point(module_scope)

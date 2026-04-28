@@ -1,9 +1,17 @@
 ﻿<Project DefaultTargets="BuildAll" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\Directory.Build.props" Condition="Exists('..\Directory.Build.props')" />
 
   <PropertyGroup>
     <SolutionPath>../src/dotnet/MotionCapture.slnx</SolutionPath>
     <ContractsDir>../src/contracts</ContractsDir>
     <PythonDir>../src/python/motion</PythonDir>
+    <BlenderDir>../src/python/blender</BlenderDir>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <SkipBlenderProto>false</SkipBlenderProto>
+    <SkipBlenderProto Condition="'$(BlenderPythonPath)' == ''">true</SkipBlenderProto>
+    <SkipBlenderProto Condition="'$(BlenderPythonPath)' != '' and !Exists('$(BlenderPythonPath)')">true</SkipBlenderProto>
   </PropertyGroup>
 
   <!-- CLEAN -->
@@ -24,6 +32,14 @@
       <FilesToClean Include="$(PythonDir)/contracts/%(ContractSubdirs.Identity)/*.pyi" />
     </ItemGroup>
     <Delete Files="@(FilesToClean)" />
+
+    <ItemGroup>
+      <ContractBlenderSubdirs Include="skeleton" />
+      <BlenderFilesToClean Include="$(BlenderDir)/contracts/%(ContractBlenderSubdirs.Identity)/*.py"
+                    Exclude="$(BlenderDir)/contracts/%(ContractBlenderSubdirs.Identity)/__init__.py" />
+      <BlenderFilesToClean Include="$(BlenderDir)/contracts/%(ContractBlenderSubdirs.Identity)/*.pyi" />
+    </ItemGroup>
+    <Delete Files="@(BlenderFilesToClean)" />
   </Target>
 
   <!-- BUILD DOTNET -->
@@ -45,8 +61,18 @@
       <ProtoFiles Include="$(ContractsDir)\camera\*.proto" />
       <ProtoFiles Include="$(ContractsDir)\health\*.proto" />
     </ItemGroup>
+    <ItemGroup>
+      <ProtoBlenderFiles Include="$(ContractsDir)\skeleton\*.proto" />
+    </ItemGroup>
 
     <Exec Command="&quot;..\src\python\motion\venv\Scripts\python.exe&quot; -m grpc_tools.protoc -I$(ContractsDir) --python_out=$(PythonDir)/contracts --grpc_python_out=$(PythonDir)/contracts --pyi_out=$(PythonDir)/contracts @(ProtoFiles, ' ')" />
+    
+    <Message Text="Generating Blender Python contracts..." Importance="high" Condition="'$(SkipBlenderProto)' != 'true'" />
+    <Exec Command="&quot;$(BlenderPythonPath)&quot; -m grpc_tools.protoc -I$(ContractsDir) --python_out=$(BlenderDir)/contracts --grpc_python_out=$(BlenderDir)/contracts --pyi_out=$(BlenderDir)/contracts @(ProtoBlenderFiles, ' ')"
+          Condition="'$(SkipBlenderProto)' != 'true'" />
+
+    <Warning Text="BlenderPythonPath is not set or does not exist ('$(BlenderPythonPath)'). Blender proto generation skipped."
+             Condition="'$(SkipBlenderProto)' == 'true'" />
   </Target>
 
   <!-- BUILD ALL -->

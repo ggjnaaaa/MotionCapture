@@ -24,4 +24,14 @@
       <ProjectReference Include="..\MotionCapture.Core\MotionCapture.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Protobuf Include="..\..\contracts\motion\motion_messages.proto" GrpcServices="None" ProtoRoot="..\..\contracts" />
+      <Protobuf Include="..\..\contracts\motion\motion_service.proto" GrpcServices="Client" ProtoRoot="..\..\contracts" />
+      <Protobuf Include="..\..\contracts\camera\camera_messages.proto" GrpcServices="None" ProtoRoot="..\..\contracts" />
+      <Protobuf Include="..\..\contracts\camera\camera_service.proto" GrpcServices="Client" ProtoRoot="..\..\contracts" />
+      <Protobuf Include="..\..\contracts\calibration\calibration_messages.proto" GrpcServices="None" ProtoRoot="..\..\contracts" />
+      <Protobuf Include="..\..\contracts\calibration\calibration_service.proto" GrpcServices="Client" ProtoRoot="..\..\contracts" />
+      <Protobuf Include="..\..\contracts\health\health_check_service.proto" GrpcServices="Client" ProtoRoot="..\..\contracts" />
+    </ItemGroup>
+
 </Project>

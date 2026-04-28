@@ -1,6 +1,8 @@
 <Solution>
-  <Project Path="MotionCapture/MotionCapture.csproj" />
   <Project Path="MotionCapture.Core/MotionCapture.Core.csproj" />
   <Project Path="MotionCapture.Infrastructure.Camera/MotionCapture.Infrastructure.Camera.csproj" />
   <Project Path="MotionCapture.Infrastructure.GrpcClient/MotionCapture.Infrastructure.GrpcClient.csproj" />
+  <Project Path="MotionCapture.Infrastructure.GrpcServer/MotionCapture.Infrastructure.GrpcServer.csproj" Id="514e005d-6460-405f-a77e-a8929c2b9400" />
+  <Project Path="MotionCapture.Processing/MotionCapture.Processing.csproj" Id="c767c53e-a1fd-4236-b9d1-76d61abe6af1" />
+  <Project Path="MotionCapture/MotionCapture.csproj" />
 </Solution>

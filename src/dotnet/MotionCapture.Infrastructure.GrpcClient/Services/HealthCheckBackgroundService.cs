@@ -13,7 +13,7 @@ public class HealthCheckBackgroundService : BackgroundService
     private readonly HealthCheckService.HealthCheckServiceClient _healthClient;
     private readonly IConnectionStateService _connectionStateService;
     private readonly ILogger<HealthCheckBackgroundService> _logger;
-    private readonly TimeSpan _checkInterval = TimeSpan.FromSeconds(30000);
+    private readonly TimeSpan _checkInterval = TimeSpan.FromSeconds(5);
     private readonly TimeSpan _timeout = TimeSpan.FromSeconds(3);
 
     public HealthCheckBackgroundService(
